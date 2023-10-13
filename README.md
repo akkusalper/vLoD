@@ -27,11 +27,11 @@ While vLoD can be run from source, we recommend using the provided Docker contai
 ## Usage Example
 
 #### Variant Limit of Detection Prediction:
-To evaluate the detectability of variants, use the `LOD_11_05_23_updated_14_08_23.py` script.
+###### To evaluate the detectability of variants, use the `LOD_11_05_23_updated_14_08_23.py` script.
 docker run -v $PWD:/data --rm -w /data -t --entrypoint python alperakkus/vlod:latest /usr/src/app/LOD_11_05_23_updated_14_08_23.py --input-vcf [input.vcf] --input-bam [input.bam] --input-bam-index [input.bam.bai] --output [output.xls]
 
 #### Integrating Detectability Status into VCF:
-To integrate detectability status into the original VCF, use the `merge_detectability.py` script.
+###### To integrate detectability status into the original VCF, use the `merge_detectability.py` script.
 docker run -v $PWD:/data --rm -w /data -t --entrypoint python alperakkus/vlod:latest merge_detectability.py /data/[input.vcf] /data/[input.xls] /data/[output.vcf]
 
 ### From Source
