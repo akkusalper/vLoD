@@ -28,12 +28,14 @@ While vLoD can be run from source, we recommend using the provided Docker contai
 
 #### Variant Limit of Detection Prediction:
 ###### To evaluate the detectability of variants, use the `LOD_11_05_23_updated_14_08_23.py` script.
+```
 docker run -v $PWD:/data --rm -w /data -t --entrypoint python alperakkus/vlod:latest /usr/src/app/LOD_11_05_23_updated_14_08_23.py --input-vcf [input.vcf] --input-bam [input.bam] --input-bam-index [input.bam.bai] --output [output.xls]
-
+```
 #### Integrating Detectability Status into VCF:
 ###### To integrate detectability status into the original VCF, use the `merge_detectability.py` script.
+```
 docker run -v $PWD:/data --rm -w /data -t --entrypoint python alperakkus/vlod:latest merge_detectability.py /data/[input.vcf] /data/[input.xls] /data/[output.vcf]
-
+```
 ### From Source
 
 1. Clone the repository:
@@ -46,11 +48,13 @@ cd vLoD
 ### Example
 
 #### Variant Limit of Detection Prediction:
+```
 python LOD_11_05_23_updated_14_08_23.py --input-vcf [input.vcf] --input-bam [input.bam] --input-bam-index [input.bam.bai] --output [output.xls]
-
+```
 #### Integrating Detectability Status into VCF:
+```
 python merge_detectability.py [input.vcf] [input.xls] [output.vcf]
-
+```
 ## Outputs
 
 vLoD produces an output table (in `.xls` format) with the following columns:
