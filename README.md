@@ -1,8 +1,8 @@
-# Variant Limit of Detection Predictor (vLoD)
+# Variant Limit of Detection Tool (vLoD)
 
 ## Introduction
 
-vLoD is a comprehensive open-source tool designed to predict the detectability status of alleles from variant call files (VCF) using matched sequencing data. 
+vLoD is a comprehensive open-source tool designed to statistically asses the detectability status of alleles from variant call files (VCF) using matched sequencing data. 
 vLoD calculates the likelihood of observing each variant in the context of a given sequencing error rate, true positive rate, and false positive rate. This allows users to assign a detectability score to each variant and classify variants as detectable or non-detectable.
 
 ## Features
@@ -26,7 +26,7 @@ While vLoD can be run from source, we recommend using the provided Docker contai
 
 ## Usage Example
 
-#### Variant Limit of Detection Prediction:
+#### Variant Limit of Detection iction:
 ###### To evaluate the detectability of variants, use the `LOD_11_05_23_updated_14_08_23.py` script.
 ```
 docker run -v $PWD:/data --rm -w /data -t --entrypoint python alperakkus/vlod:latest /usr/src/app/LOD_11_05_23_updated_14_08_23.py --input-vcf [input.vcf] --input-bam [input.bam] --input-bam-index [input.bam.bai] --output [output.xls]
@@ -47,7 +47,7 @@ cd vLoD
 
 ### Example
 
-#### Variant Limit of Detection Prediction:
+#### Variant Limit of Detection:
 ```
 python LOD_11_05_23_updated_14_08_23.py --input-vcf [input.vcf] --input-bam [input.bam] --input-bam-index [input.bam.bai] --output [output.xls]
 ```
