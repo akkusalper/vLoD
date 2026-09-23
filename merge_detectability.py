@@ -18,21 +18,29 @@ def merge_detectability_into_vcf(vcf_path, detectability_path, output_path):
             if line.startswith("##INFO"):
                 updated_vcf_lines.append(line)
                 if "TLOD" in line:
-                    updated_vcf_lines.append('##INFO=<ID=DET,Number=1,Type=String,Description="Detectability status (Yes if detectable, No if non-detectable)">\n')
-                    updated_vcf_lines.append('##INFO=<ID=DETS,Number=1,Type=Float,Description="Detectability Score">\n')
+                    updated_vcf_lines.append('##INFO=<ID=DET,Number=A,Type=String,Description="Detectability status per ALT allele (Yes if detectable, No if non-detectable)">\n')
+                    updated_vcf_lines.append('##INFO=<ID=DETS,Number=A,Type=Float,Description="Detectability Score per ALT allele">\n')
                 continue
             if line.startswith("##") or line.startswith("#"):
                 updated_vcf_lines.append(line)
                 continue
             columns = line.strip().split("\t")
-            vcf_id = f"{columns[0]}_{columns[1]}_{columns[3]}_{columns[4]}"
-            if vcf_id in detectability_data_dict:
-                detectability_status = detectability_data_dict[vcf_id]['condition']
-                detectability_score = detectability_data_dict[vcf_id]['score']
-                columns[7] = columns[7] + f";DET={detectability_status};DETS={detectability_score}"
-                updated_vcf_lines.append("\t".join(columns) + "\n")
-            else:
-                updated_vcf_lines.append(line)
+            chrom, pos, ref, alts = columns[0], columns[1], columns[3], columns[4]
+
+            # The detectability scorer emits one row per decomposed ALT allele
+            # (e.g. chr12_25245351_C_A and chr12_25245351_C_G), so a
+            # multiallelic VCF line's raw, comma-joined ALT field ("A,G")
+            # never matches a dict key on its own. Look up each allele
+            # separately and recombine, per VCF's Number=A convention.
+            statuses, scores = [], []
+            for alt in alts.split(","):
+                entry = detectability_data_dict.get(f"{chrom}_{pos}_{ref}_{alt}")
+                statuses.append(entry['condition'] if entry else ".")
+                scores.append(str(entry['score']) if entry else ".")
+
+            if any(status != "." for status in statuses):
+                columns[7] = columns[7] + f";DET={','.join(statuses)};DETS={','.join(scores)}"
+            updated_vcf_lines.append("\t".join(columns) + "\n")
 
     # Save the updated VCF
     with open(output_path, "w") as out_vcf:
